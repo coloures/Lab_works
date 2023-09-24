@@ -1,0 +1,148 @@
+1 задание (определить наименьшую длину подпоследовательности, состоящую из одинаковых элементов) (строки с "//" делал для проверки работоспособности программы)
+using System;
+
+namespace ConsoleApp10
+{
+    class Program
+    {
+        static void Main()
+        {             
+            string number = Console.ReadLine();
+            int quantity = number.Length;
+            //Console.WriteLine(quantity);
+            int current = 1;                            
+            int min = quantity;                             
+            char last = number[0];                     
+            for (int i = 1; i < quantity+1; i++)
+            {
+                //int a = i + 1;
+                if (i == quantity)
+                {
+                    if (current < min){
+                        min = current;
+                        Console.WriteLine(min);
+                    }
+                    else
+                    {
+                        Console.WriteLine(min);
+                    }
+                }
+                else
+                {
+                    //Console.WriteLine(last == number[i]);
+                    //Console.WriteLine("last   " + last);
+                    //Console.WriteLine("number[i]   " + number[i]);
+                    if (last == number[i])
+                    {
+                        current ++;
+                        last = number[i];
+                    }
+                    else
+                    {
+                        if(current < min)
+                        {
+                            min = current;
+                        }
+                        current = 1;
+                        last = number[i];
+                    }
+                    //Console.WriteLine("Номер элемента: " + a + " текущая послед-ть: " + current);
+                    //Console.WriteLine("Минимум: " + min);
+                }
+            }
+            
+        }
+    }
+}
+
+
+2 задание (определить все ли элементы последовательности кратны номеру под которым они считываются (номер первый кратен единице, номер второй кратен двойке и т.д.)
+using System;
+class HelloWorld {
+  static void Main() {
+    string number = Console.ReadLine();
+    int length = number.Length;
+    bool answer = true;
+    for (int i = 1; i <= length; i++)
+    {
+        if ((Convert.ToInt32(number[i-1])-48)%i != 0)
+        {
+            answer = false;
+        }
+    }
+    Console.WriteLine(answer);
+  }
+}
+
+
+3 задание (определить макс. длину подпоследовательности состоящей из различных элементов) (на ввод подается просто число - вывод макс. последовательность)
+using System;
+class HelloWorld {
+  static void Main() {
+    string numbers = Console.ReadLine();
+    int length = numbers.Length;
+    int current = 0;
+    char last = 'a';
+    int max = 1;
+    for (int i =0; i < length+1; i++) 
+    {
+        
+        if (i == length)
+        {
+            if (current>max)
+            {
+                max = current;
+                Console.WriteLine(max);
+            }
+            else 
+            {Console.WriteLine(max);
+                
+            }
+        }
+        else
+        {
+            if(last != numbers[i])
+            {
+                current = current + 1;
+                last = numbers[i];
+            }
+            else
+            {
+                if(current > max)
+                {
+                    max = current;
+                    current = 1;
+                    last = numbers[i];
+                }
+                else
+                {
+                    current = 1;
+                    last = numbers[i];
+                }
+            }
+        }
+    }
+        
+  }
+}
+4 задание (определить образует ли заданная последовательность равномерно убывающую последовательность элементов)
+using System;
+class HelloWorld {
+  static void Main() {
+    string number = Console.ReadLine();
+    int length = number.Length;
+    bool answer = true;
+    int step = ((Convert.ToInt32(number[0])-48) - (Convert.ToInt32(number[1])-48));
+    int previous = (Convert.ToInt32(number[1])-48);
+    for (int i = 2; i < length; i++)
+    {
+        if (previous - (Convert.ToInt32(number[i])-48) != step)
+        {
+            answer = false;
+        }
+        previous = (Convert.ToInt32(number[i])-48);
+        
+    }
+    Console.WriteLine(answer);
+  }
+}
