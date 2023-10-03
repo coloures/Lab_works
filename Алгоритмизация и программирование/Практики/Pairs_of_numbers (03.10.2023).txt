@@ -1,0 +1,152 @@
+using System;
+class HelloWorld {
+  static void Main() {
+    int num_pairs = Convert.ToInt32(Console.ReadLine());
+    int num_1 = 0; // число без остатка на 3
+    int num_2 = 0; // число с остатком 1 на 3
+    int num_3 = 0; // число с остатком 2 на 3
+    int new_num_1 = 0;
+    int new_num_2 = 0;
+    int new_num_3 = 0;
+    int try_1;
+    int try_2;
+    int try_3;
+    for (int i = 1; i < num_pairs+1; ++i)
+    {
+        string pairs = Console.ReadLine();
+        int first = Convert.ToInt32(pairs.Split(' ')[0]);
+        int second = Convert.ToInt32(pairs.Split(' ')[1]);
+        Console.WriteLine($"{first}; {second}");
+        if(i==1)
+        {
+            if(first%3 == 0)
+            {
+                num_1 = first;
+            }
+            if(first%3 == 1)
+            {
+                num_2 = first;
+            }
+            if(first%3 == 2)
+            {
+                num_3 = first;
+            }
+            if(second%3 == 0)
+            {
+                num_1 = second > num_1 ? second : num_1;
+            }
+            if(second%3 == 1)
+            {
+                num_2 = second > num_2 ? second : num_2;
+            }
+            if(second%3 == 2)
+            {
+                num_3 = second > num_3 ? second : num_3;
+            }
+        }
+        else
+        {
+            // проверка для 1 числа
+            if((num_1 + first)%3 == 1 & num_1 > 0)
+            {
+                try_2 = num_1+first > num_2 ? num_1 + first : num_2;
+                new_num_2 = new_num_2 > try_2 ? new_num_2 : try_2;
+            }
+            if((num_1 + second)%3 == 1 & num_1 > 0)
+            {
+                try_2 = num_1 + second > num_2 ? num_1 + second : num_2;
+                new_num_2 = new_num_2 > try_2 ? new_num_2 : try_2;
+            }
+            if((num_1 + first)%3 == 2 & num_1 > 0)
+            {
+                try_3 = num_1 + first > num_3 ? num_1 + first : num_3;
+                new_num_3 = new_num_3 > try_3 ? new_num_3 : try_3;
+            }
+            if((num_1 + second)%3 == 2 & num_1 > 0)
+            {
+                try_3 = num_1 + second > num_3 ? num_1 + second : num_3;
+                new_num_3 = new_num_3 > try_3 ? new_num_3 : try_3;
+            }
+            if ((num_1 + first)%3 == 0 & num_1 > 0)
+            {
+                try_1 = num_1 + first > num_1 ? num_1 + first : num_1;
+                new_num_1 = new_num_1 > try_1 ? new_num_1 : try_1;
+            }
+            if((num_1 + second)%3 == 0 & num_1 > 0)
+            {
+                try_1 = num_1 + second > num_1 ? num_1 + second : num_1;
+                new_num_1 = new_num_1 > try_1 ? new_num_1 : try_1;
+            }
+            // проверка 2 числа
+            if((num_2 + first)%3 == 0 & num_2 > 0)
+            {
+                try_1 = num_2 + first > num_1 ? num_2 + first : num_1;
+                new_num_1 = new_num_1 > try_1 ? new_num_1 : try_1;
+            }
+            if((num_2 + second)%3 == 0 & num_2 > 0)
+            {
+                try_1 = num_2 + second > num_1 ? num_2 + second : num_1;
+                new_num_1 = new_num_1 > try_1 ? new_num_1 : try_1;
+            }
+            if((num_2+first)%3 == 1 & num_2 > 0)
+            {
+                try_2 = num_2 + first > num_2 ? num_2 + first : num_2;
+                new_num_2 = new_num_2 > try_2 ? new_num_2 : try_2;
+            }
+            if((num_2 + second)%3 == 1 & num_2 > 0)
+            {
+                try_2 = num_2 + second > num_2 ? num_2 + second : num_2;
+                new_num_2 = new_num_2 > try_2 ? new_num_2 : try_2;
+            }
+            if((num_2 + first)%3 == 2 & num_2 > 0)
+            {
+                try_3 = num_2 + first > num_3 ? num_2 + first : num_3;
+                new_num_3 = new_num_3 > try_3 ? new_num_3 : try_3;
+            }
+            if((num_2 + second)%3 == 2 & num_2 > 0)
+            {
+                try_3 = num_2 + second > num_3 ? num_2 + second : num_3;
+                new_num_3 = new_num_3 > try_3 ? new_num_3 : try_3;
+            }
+            // проверка 3 числа
+            if((num_3 + first)%3 == 0 & num_3 > 0)
+            {
+                try_1 = num_3 + first > num_1 ? num_3 + first : num_1;
+                new_num_1 = new_num_1 > try_1 ? new_num_1 : try_1;
+            }
+            if((num_3 + second)%3 == 0 & num_3 > 0)
+            {
+                try_1 = num_3 + second > num_1? num_3 + second : num_1;
+                new_num_1 = new_num_1 > try_1 ? new_num_1 : try_1;
+            }
+            if((num_3 + first)%3 == 1 & num_3 > 0)
+            {
+                try_2 = num_3 + first > num_2 ? num_3 + first : num_2;
+                new_num_2 = new_num_2 > try_2 ? new_num_2 : try_2;
+            }
+            if((num_3 + second)%3 == 1 & num_3 > 0)
+            {
+                try_2 = num_3 + second > num_2 ? num_3 + second : num_2;
+                new_num_2 = new_num_2 > try_2 ? new_num_2 : try_2;
+            }
+            if((num_3 + first)%3 == 2 & num_3 > 0)
+            {
+                try_3 = num_3 + first > num_3 ? num_3 + first : num_3;
+                new_num_3 = new_num_3 > try_3 ? new_num_3 : try_3;
+            }
+            if((num_3 + second)%3 == 2 & num_3 > 0)
+            {
+                try_3 = num_3 + second > num_3 ? num_3 + second : num_3;
+                new_num_3 = new_num_3 > try_3 ? new_num_3 : try_3;
+            }
+            num_1 = new_num_1;
+            num_2 = new_num_2;
+            num_3 = new_num_3;
+            Console.WriteLine($"{num_1}; {num_2}; {num_3}");
+        }
+        
+        
+    }
+    Console.WriteLine(num_1);
+  }
+}
