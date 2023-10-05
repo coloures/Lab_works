@@ -1,7 +1,8 @@
 using System;
 class HelloWorld {
   static void Main() {
-    int [] array = new int [1048476];
+    int number = Convert.ToInt32(Console.ReadLine());
+    int [] array = new int [number];
     Console.WriteLine(dividing(array));
   }
   public static int dividing (int [] array)
