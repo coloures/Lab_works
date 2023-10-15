@@ -1,0 +1,150 @@
+using System.IO;
+using System;
+using System.Text;
+using System.IO.Pipes;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main()
+        {
+            string line;
+            int number;
+            string[] forms;
+            string[] parts;
+            string[] answers;
+            string first;
+            string second;
+            string temp_form = "";
+            try
+            {
+                //Pass the file path and file name to the StreamReader constructor
+                StreamReader sr = new StreamReader("E:\\Projects_VS\\ConsoleApp25\\ConsoleApp1\\input11.txt");
+                //Read the first line of text
+                line = sr.ReadLine();
+                number = Convert.ToInt32(line);
+                forms = new string[number];
+                parts = new string[2 * number];
+                answers = new string[number];
+                int a = 0;
+                //Continue to read until you reach end of file
+                while (a < number)
+                {
+                    //Read the next line
+                    line = sr.ReadLine();
+                    //write the line to console window
+                    string[] frm = line.Split(' ');
+                    string new_frm = string.Join("", frm);
+                    forms[a] = new_frm;
+                    a++;
+                }
+                int b = 0;
+                while (b < 2 * number)
+                {
+                    line = sr.ReadLine();
+                    string[] prt = line.Split(' ');
+                    string new_prt = string.Join("", prt);
+                    parts[b] = new_prt;
+                    b++;
+
+                }
+                for (int i = 0; i < 2 * number - 1; i++)
+                {
+                        string answer = "";
+                        first = parts[i];
+                        for (int j = i + 1; j < 2 * number; j++)
+                        {
+                            second = parts[j];
+                            if (first.Substring(0, 5) == reversed(second.Substring(0, 5))
+                            & first.Substring(10, 5) == reversed(second.Substring(10, 5)))
+                            {
+                                //Console.WriteLine($"{i} - i; {j} - j");
+                                temp_form = first.Substring(0, 5) + reversed(second.Substring(5, 5)) + first.Substring(10, 5) + first.Substring(5, 5);
+                                answer = $"{i + 1} {j + 1}";
+                                foreach (string form in forms)
+                                {
+                                    if (((form + form.Substring(0, 10)).Contains(temp_form.Substring(0, 15))
+                                        & (form + form.Substring(0, 10)).Contains(temp_form.Substring(5, 15))
+                                        & (form + form.Substring(0, 10)).Contains(temp_form.Substring(10, 10) + temp_form.Substring(0, 5))
+                                        & (form + form.Substring(0, 10)).Contains(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                    {
+                                        answers[Array.IndexOf(forms, form)] = answer;
+                                        //Console.WriteLine($"{i} - i; {j} - j");
+
+                                    }
+                                    else if ((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(0, 15)))
+                                        & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(5, 15)))
+                                        & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(10, 10) + temp_form.Substring(0, 5)))
+                                        & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                    {
+                                        answers[Array.IndexOf(forms, form)] = answer;
+                                        //Console.WriteLine($"{i} - i; {j} - j");
+
+                                    }
+                                    else { }
+                                }
+                            }
+                            else if (first.Substring(0, 5) == second.Substring(10, 5)
+                            & first.Substring(10, 5) == second.Substring(0, 5))
+                            {
+                                temp_form = first.Substring(0, 5) + second.Substring(5, 5) + first.Substring(10, 5) + first.Substring(5, 5);
+                                answer = $"{i + 1} {j + 1}";
+                                foreach (string form in forms)
+                                {
+                                    if (((form + form.Substring(0, 10)).Contains(temp_form.Substring(0, 15))
+                                        & (form + form.Substring(0, 10)).Contains(temp_form.Substring(5, 15))
+                                        & (form + form.Substring(0, 10)).Contains(temp_form.Substring(10, 10) + temp_form.Substring(0, 5))
+                                        & (form + form.Substring(0, 10)).Contains(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                    {
+                                        answers[Array.IndexOf(forms, form)] = answer;
+                                        //Console.WriteLine($"{i} - i; {j} - j");
+
+                                    }
+                                    else if ((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(0, 15)))
+                                        & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(5, 15)))
+                                        & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(10, 10) + temp_form.Substring(0, 5)))
+                                        & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                    {
+                                        answers[Array.IndexOf(forms, form)] = answer;
+                                        //Console.WriteLine($"{i} - i; {j} - j");
+
+                                    }
+                                }
+                            }
+                        }
+                }
+                int n = 0;
+                try
+                {
+                    StreamWriter sw = new StreamWriter("E:\\Projects_VS\\ConsoleApp25\\ConsoleApp1\\output.txt");
+                    foreach (string ans in answers)
+                    {
+                        sw.WriteLine(ans);
+                    }
+
+                    sw.Close();
+                }
+                finally
+                {
+                }
+                sr.Close();
+            }
+            finally
+            {
+
+            }
+        }
+        public static string reversed(string str)
+        {
+            char[] chars = str.ToCharArray();
+            char[] temporaty_str = new char[str.Length];
+            for (int i = 0; i < str.Length; i++)
+            {
+                temporaty_str[i] = chars[str.Length - i - 1];
+            }
+            string new_str = string.Join("", temporaty_str);
+            return new_str; // переворот строки наоборот
+        }
+    }
+}
