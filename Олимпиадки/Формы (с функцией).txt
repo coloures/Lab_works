@@ -1,0 +1,386 @@
+using System.IO;
+using System;
+using System.Text;
+using System.IO.Pipes;
+using System.Net.Http.Headers;
+
+namespace ConsoleApp3
+{
+    internal class Program
+    {
+        static void Main()
+        {
+            string line;
+            int number;
+            string[] forms;
+            string[] parts;
+            string[] answers;
+            string first;
+            string second;
+            string temp_form = "";
+            string[] used_forms;
+            try
+            {
+                //Pass the file path and file name to the StreamReader constructor
+                StreamReader sr = new StreamReader("E:\\Projects_VS\\ConsoleApp25\\ConsoleApp1\\input11.txt");
+                //Read the first line of text
+                line = sr.ReadLine();
+                number = Convert.ToInt32(line);
+                forms = new string[number];
+                parts = new string[2 * number];
+                answers = new string[number];
+                used_forms = new string[number];
+                int a = 0;
+                //Continue to read until you reach end of file
+                while (a < number)
+                {
+                    //Read the next line
+                    line = sr.ReadLine();
+                    //write the line to console window
+                    string[] frm = line.Split(' ');
+                    string new_frm = string.Join("", frm);
+                    forms[a] = new_frm;
+                    a++;
+                }
+                int b = 0;
+                while (b < 2 * number)
+                {
+                    line = sr.ReadLine();
+                    string[] prt = line.Split(' ');
+                    string new_prt = string.Join("", prt);
+                    parts[b] = new_prt;
+                    b++;
+
+                }
+                int c = 0;
+                for (int i = 0; i < 2 * number - 1; i++)
+                {
+                    string answer = "";
+                    first = parts[i];
+                    for (int j = i + 1; j < 2 * number; j++)
+                    {
+                        second = parts[j];
+                        if (first.Substring(0, 5) == reversed(second.Substring(0, 5))
+                        & first.Substring(10, 5) == reversed(second.Substring(10, 5)))
+                        {
+                            //Console.WriteLine($"{i} - i; {j} - j");
+                            temp_form = first.Substring(0, 5) + reversed(second.Substring(5, 5)) + first.Substring(10, 5) + first.Substring(5, 5);
+                            answer = $"{i + 1} {j + 1}";
+                            foreach (string form in forms)
+                            {
+                                if (((form + form.Substring(0, 10)).Contains(temp_form.Substring(0, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(5, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(10, 10) + temp_form.Substring(0, 5))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //    used_forms[c++] = form;
+                                    //}
+                                }
+                                else if ((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(0, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(5, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(10, 10) + temp_form.Substring(0, 5)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //    used_forms[c++] = form;
+                                    //}
+
+                                }
+                                else { }
+                            }
+                        }
+                        else if (first.Substring(0, 5) == second.Substring(10, 5)
+                        & first.Substring(10, 5) == second.Substring(0, 5))
+                        {
+                            temp_form = first.Substring(0, 5) + second.Substring(5, 5) + first.Substring(10, 5) + first.Substring(5, 5);
+                            answer = $"{i + 1} {j + 1}";
+                            foreach (string form in forms)
+                            {
+                                if (((form + form.Substring(0, 10)).Contains(temp_form.Substring(0, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(5, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(10, 10) + temp_form.Substring(0, 5))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //   used_forms[c++] = form;
+                                    //}
+
+                                }
+                                else if ((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(0, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(5, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(10, 10) + temp_form.Substring(0, 5)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //    used_forms[c++] = form;
+                                    //}
+                                }
+                            }
+                        }
+                    }
+                }
+                int d = 0;
+                string[] used_nums = new string[2*number];
+                foreach (string answ in answers) 
+                {
+                    used_nums[d++] = answ.Split(' ')[0];
+                    used_nums[d++] = answ.Split(' ')[1];
+
+                }
+                for(int y = 0; y < 2*number-1; y++) 
+                {
+                    for(int x = y+1; x < 2*number; x++) 
+                    {
+                        if (used_nums[x] == used_nums[y]) 
+                        {
+                            used_nums[x] = "-1";
+                        }
+                    
+                    
+                    }
+                
+                }
+                changing(ref answers, used_nums,forms,parts);
+                //foreach(string used in used_nums) 
+                //{
+                //    Console.WriteLine(used);
+                //}
+
+
+                int n = 0;
+                try
+                {
+                    StreamWriter sw = new StreamWriter("E:\\Projects_VS\\ConsoleApp25\\ConsoleApp3\\output.txt");
+                    foreach (string ans in answers)
+                    {
+                        sw.WriteLine(ans);
+                    }
+
+                    sw.Close();
+                }
+                finally
+                {
+                }
+                sr.Close();
+            }
+            finally
+            {
+
+            }
+        }
+        static string reversed(string str)
+        {
+            char[] chars = str.ToCharArray();
+            char[] temporaty_str = new char[str.Length];
+            for (int i = 0; i < str.Length; i++)
+            {
+                temporaty_str[i] = chars[str.Length - i - 1];
+            }
+            string new_str = string.Join("", temporaty_str);
+            return new_str; // переворот строки наоборот
+        }
+        static void changing(ref string[] answers, string[] used_nums, string[] forms, string[] parts) 
+        {
+            int count = 0;
+            foreach (string s in used_nums) 
+            {
+                if (Convert.ToInt32(s) == -1) 
+                {
+                    count++;
+                }            
+            }
+            if (count != 0) 
+            {
+                string[,] left_parts = new string[2, count];
+                string[] nums_of_parts = new string[answers.Length * 2];
+                for (int i = 1; i < answers.Length * 2 + 1; i++)
+                {
+                    nums_of_parts[i - 1] = $"{i}";
+                }
+                foreach (string use in used_nums)
+                {
+                    if (nums_of_parts.Contains(use))
+                    {
+                        nums_of_parts[Array.IndexOf(nums_of_parts, use)] = "-1";
+                    }
+                }
+                int count_2 = 0;
+                foreach (string num in nums_of_parts)
+                {
+                    if (num != "-1")
+                    {
+                        left_parts[0, count_2] = num;
+                        left_parts[1, count_2++] = parts[Convert.ToInt32(num) - 1];
+                    }
+
+                }
+
+
+
+
+                for(int l = 0; l < left_parts.GetUpperBound(0)+1;  l++) 
+                {
+                    for (int m = 0; m < left_parts.GetUpperBound(1) + 1; m++) 
+                    {
+                        Console.WriteLine(left_parts[l, m]);
+                    }
+                }
+
+
+
+
+
+                string temp_form;
+                for (int i = 0; i < left_parts.GetUpperBound(1); i++) 
+                {
+                    for (int j = i + 1; j < left_parts.GetUpperBound(1)+1; j++) 
+                    {
+                        Console.WriteLine($"defrfrf  ----    {j}");
+                        Console.WriteLine($"defrfrf  ----    {i}");
+
+                        Console.WriteLine(left_parts[1, j].Substring(0, 5));
+                        Console.WriteLine("done");
+                        if ((left_parts[1, i].Substring(0, 5) == reversed(left_parts[1, j].Substring(0, 5))
+                            & left_parts[1, i].Substring(10, 5) == reversed(left_parts[1, j].Substring(10, 5))))
+                        {
+                            Console.WriteLine("done1");
+                            temp_form = left_parts[1, i].Substring(0, 5) + reversed(left_parts[1, j].Substring(5, 5))
+                                + left_parts[1, i].Substring(10, 5) + left_parts[1, i].Substring(5, 5);
+                            Console.WriteLine(temp_form);
+                            Console.WriteLine("done1");
+                            foreach (string form in forms)
+                            {
+                                string answer = Convert.ToInt32(left_parts[0, j]) > Convert.ToInt32(left_parts[0, i]) ?
+                                    $"{Convert.ToInt32(left_parts[0, i])} {Convert.ToInt32(left_parts[0, j])}" :
+                                    $"{Convert.ToInt32(left_parts[0, j])} {Convert.ToInt32(left_parts[0, i])}";
+                                Console.WriteLine(answer);
+                                Console.WriteLine(form);
+                                Console.WriteLine(form + form.Substring(0, 10));
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(temp_form.Substring(0, 15)));
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(temp_form.Substring(5, 15)));
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(temp_form.Substring(10, 10) + temp_form.Substring(0, 5)));
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(temp_form.Substring(15, 5) + temp_form.Substring(0, 10)));
+
+
+
+                                Console.WriteLine("ffrfrfrfrfrfr");
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(0, 15))));
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(5, 15))));
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(10, 10) + temp_form.Substring(0, 5))));
+                                Console.WriteLine((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))));
+
+                                if (((form + form.Substring(0, 10)).Contains(temp_form.Substring(0, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(5, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(10, 10) + temp_form.Substring(0, 5))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    Console.WriteLine("done2");
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //    used_forms[c++] = form;
+                                    //}
+                                }
+                                else if ((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(0, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(5, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(10, 10) + temp_form.Substring(0, 5)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    Console.WriteLine("done3");
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //    used_forms[c++] = form;
+                                    //}
+
+                                }
+
+
+
+                            }
+
+
+
+
+
+                        }
+                        else if ((left_parts[1, i].Substring(0, 5) == left_parts[1, j].Substring(10, 5))
+                            & left_parts[1, i].Substring(10, 5) == left_parts[1, j].Substring(0, 5)) 
+                        {
+                            temp_form = left_parts[1, i].Substring(0, 5) + left_parts[1, j].Substring(5, 5)
+                                + left_parts[1, i].Substring(10, 5) + left_parts[1, i].Substring(5, 5);
+                            foreach (string form in forms)
+                            {
+                                string answer = Convert.ToInt32(left_parts[0, j]) > Convert.ToInt32(left_parts[0, i]) ?
+                                    $"{Convert.ToInt32(left_parts[0, i])} {Convert.ToInt32(left_parts[0, j])}" :
+                                    $"{Convert.ToInt32(left_parts[0, j])} {Convert.ToInt32(left_parts[0, i])}";
+                                if (((form + form.Substring(0, 10)).Contains(temp_form.Substring(0, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(5, 15))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(10, 10) + temp_form.Substring(0, 5))
+                                    & (form + form.Substring(0, 10)).Contains(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    Console.WriteLine("done4");
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //    used_forms[c++] = form;
+                                    //}
+                                }
+                                else if ((form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(0, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(5, 15)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(10, 10) + temp_form.Substring(0, 5)))
+                                    & (form + form.Substring(0, 10)).Contains(reversed(temp_form.Substring(15, 5) + temp_form.Substring(0, 10))))
+                                {
+                                    answers[Array.IndexOf(forms, form)] = answer;
+                                    Console.WriteLine("done5");
+                                    //if (used_forms.Contains(form) == false)
+                                    //{
+                                    //    answers[Array.IndexOf(forms, form)] = answer;
+                                    //    //Console.WriteLine($"{i} - i; {j} - j");
+                                    //    used_forms[c++] = form;
+                                    //}
+
+                                }
+
+
+
+                            }
+
+
+
+                        }
+                    }
+
+                }
+                foreach(var answer in answers) 
+                {
+                    Console.WriteLine(answer);
+                }
+            }
+
+        }
+    }
+}
