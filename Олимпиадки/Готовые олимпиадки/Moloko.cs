@@ -50,20 +50,6 @@ namespace Milk
                     sr.Close();
                 }
                 finally { }
-                //string info = Console.ReadLine();
-                //string [] info_ = info.Split(' ');
-                //double multiplier = 
-                //    (2.0* Convert.ToInt32(info_[0]) * Convert.ToInt32(info_[2]) + 
-                //     2.0 * Convert.ToInt32(info_[0]) * Convert.ToInt32(info_[1]) + 
-                //     2.0 * Convert.ToInt32(info_[1]) * Convert.ToInt32(info_[2])) /
-                //    (2.0 * Convert.ToInt32(info_[3]) * Convert.ToInt32(info_[5])+
-                //     2.0 * Convert.ToInt32(info_[3]) * Convert.ToInt32(info_[4])+
-                //     2.0 * Convert.ToInt32(info_[4]) * Convert.ToInt32(info_[5]));
-                //double quantity_of_milk = Convert.ToInt32(info_[0]) * Convert.ToInt32(info_[1]) * Convert.ToInt32(info_[2]) -
-                //    multiplier * Convert.ToInt32(info_[3]) * Convert.ToInt32(info_[4]) * Convert.ToInt32(info_[5]);
-                //double price = ((Convert.ToDouble(info_[6].Replace('.',',')) - 
-                //    multiplier * Convert.ToDouble(info_[7].Replace('.', ','))) / quantity_of_milk) * 1000.0;
-                //Console.WriteLine(Math.Round(price,2));
             }
         }
     }
