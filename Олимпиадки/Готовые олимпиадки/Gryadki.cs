@@ -1,6 +1,6 @@
 ﻿using System;
 
-class Andrey_And_Yasha
+class Gryadki
 {
     static void Main()
     {
