@@ -1,114 +1,85 @@
-﻿using System.Linq;
-using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Kruskal_s_algorithm
+namespace ConsoleApplication13
 {
-    internal class Program
+    class Program // Алгоритм Прима
     {
         static void Main(string[] args)
         {
-            string[] points = Console.ReadLine().Split(',');
-            points[0] = points[0][1] + "";
-            points[points.GetUpperBound(0)] = points[points.GetUpperBound(0)][0] + "";
-            string[] links = Console.ReadLine().Split("}, {");
-            links[0] = links[0].Substring(2);
-            links[links.GetUpperBound(0)] = links[links.GetUpperBound(0)].Substring(0, 3);
-            string[] weights = Console.ReadLine().Split(", ");
-            List <Array> Ways_temp = new List<Array>();
-            List<Array> Ways = new List<Array>();
-            for ( int i = 0; i < weights.Length; i++ ) 
+            List<string> points = new List<string>() {"1", "2", "3", "4", "5", "6", "7", "8", "9" };
+            List<string> used_points = new List<string>();
+            List<string> used_ways = new List<string>();
+            int sum = 0;
+            List<string> links = new List<string>() { "1,2", "1,5", "1,4", "2,3", "2,4", "2,5", "3,5", "3,6", "4,5", "4,7", "4,8", "5,6", "5,8", "5,9", "7,8", "8,9" };
+            List<int> weights = new List<int>() { 15, 14, 23, 19, 16, 15, 14, 26, 25, 23, 20, 24, 27, 18, 14, 18 };
+            used_points.Add(points[0]);
+            while(true)
             {
-                Ways_temp.Add(new int[3] { Convert.ToInt32(weights[i]),Convert.ToInt32("" + links[i][0]), Convert.ToInt32("" + links[i][2]) }); 
-            } // массив: (вес ребра, первый узел, второй узел)
-            List<int> temp = new List<int>();
-            foreach (Array Way in Ways_temp) 
-            {
-                temp.Add(Convert.ToInt32(Way.GetValue(0)));
-            }
-            temp.Sort();
-            int a = Ways_temp.Count;
-            for (int i = 0; i < a; i++) 
-            {
-                foreach (Array Way in Ways_temp) 
+                if (used_points.Count == points.Count)
+                { break; }
+                if (links.Contains(string.Format("{0},{1}", find_way(links, weights, used_points).GetValue(0), find_way(links, weights, used_points).GetValue(1))))
                 {
-                    if (Convert.ToInt32(Way.GetValue(0)) == temp[i]) 
+                    sum += weights[links.IndexOf(string.Format("{0},{1}", find_way(links, weights, used_points).GetValue(0), find_way(links, weights, used_points).GetValue(1)))];
+                    used_ways.Add(string.Format("{0},{1}", find_way(links, weights, used_points).GetValue(0), find_way(links, weights, used_points).GetValue(1)));
+                    used_points.Add(find_way(links, weights, used_points).GetValue(1).ToString());
+                }
+                else if (links.Contains(string.Format("{0},{1}", find_way(links, weights, used_points).GetValue(1), find_way(links, weights, used_points).GetValue(0))))
+                {
+                    sum += weights[links.IndexOf(string.Format("{0},{1}", find_way(links, weights, used_points).GetValue(1), find_way(links, weights, used_points).GetValue(0)))];
+                    used_ways.Add(string.Format("{0},{1}", find_way(links, weights, used_points).GetValue(1), find_way(links, weights, used_points).GetValue(0)));
+                    used_points.Add(find_way(links, weights, used_points).GetValue(1).ToString());
+                }
+            }
+            foreach (string ways in used_ways) 
+            {
+                Console.WriteLine(ways);
+            }
+            Console.WriteLine(sum);
+            string a = Console.ReadLine();
+
+
+        }
+        static Array find_way(List<string> links, List<int> weights, List<string> used_points)
+        {
+            int the_smallest = weights.Max()+1;
+            string next_point = string.Empty;
+            string current_point = string.Empty;
+            foreach (string point in used_points) 
+            {
+                foreach (string link in links)
+                {
+                    if ((link[0]).ToString() == point)
                     {
-                        Ways.Add(Way);
-                        Ways_temp.Remove(Way);
-                        break;
+                        if (!used_points.Contains((link[2]).ToString()))
+                        {
+                            if (the_smallest > weights[links.IndexOf(link)])
+                            {
+                                the_smallest = weights[links.IndexOf(link)];
+                                next_point = link[2].ToString();
+                                current_point = point;
+                            }
+                        }
+                    }
+                    else if ((link[2]).ToString() == point)
+                    {
+                        if (!used_points.Contains((link[0]).ToString()))
+                        {
+                            if (the_smallest > weights[links.IndexOf(link)])
+                            {
+                                the_smallest = weights[links.IndexOf(link)];
+                                next_point = link[0].ToString();
+                                current_point = point;
+                            }
+                        }
                     }
                 }
             }
-            List<int> Used_points = new List<int>(); // использованные вершины
-            Dictionary<int, List<int>> Stacks_of_ways = new Dictionary<int, List<int>>(); // "кучи вершин"
-            List<Array> Used_ways = new List<Array>(); // использованные пути
-            foreach(Array way in  Ways) // как в алгоритме : "перебор" рёбер
-            {
-                if (!Used_points.Contains(Convert.ToInt32(way.GetValue(1))) && !Used_points.Contains(Convert.ToInt32(way.GetValue(2))))
-                {
-                    Stacks_of_ways[Convert.ToInt32(way.GetValue(1))] = new List<int>() { Convert.ToInt32(way.GetValue(1)), Convert.ToInt32(way.GetValue(2)) };
-                    Stacks_of_ways[Convert.ToInt32(way.GetValue(2))] = Stacks_of_ways[Convert.ToInt32(way.GetValue(1))];
-                    Used_points.Add(Convert.ToInt32(way.GetValue(1)));
-                    Used_points.Add(Convert.ToInt32(way.GetValue(2)));
-                    Used_ways.Add(way);
-                } // если обеих вершин нет в списке использованных
-                else if (Used_points.Contains(Convert.ToInt32(way.GetValue(1))) && !Used_points.Contains(Convert.ToInt32(way.GetValue(2))))
-                {
-                    Stacks_of_ways[Convert.ToInt32(way.GetValue(1))].Add(Convert.ToInt32(way.GetValue(2)));
-                    Stacks_of_ways[Convert.ToInt32(way.GetValue(2))] = Stacks_of_ways[Convert.ToInt32(way.GetValue(1))];
-                    Used_points.Add(Convert.ToInt32(way.GetValue(2)));
-                    Used_ways.Add(way);
-                } // одна из вершин уже принадлежит списку
-                else if (!Used_points.Contains(Convert.ToInt32(way.GetValue(1))) && Used_points.Contains(Convert.ToInt32(way.GetValue(2))))
-                {
-                    Stacks_of_ways[Convert.ToInt32(way.GetValue(2))].Add(Convert.ToInt32(way.GetValue(1)));
-                    Stacks_of_ways[Convert.ToInt32(way.GetValue(1))] = Stacks_of_ways[Convert.ToInt32(way.GetValue(2))];
-                    Used_points.Add(Convert.ToInt32(way.GetValue(1)));
-                    Used_ways.Add(way);
-                } // одна из вершин уже принадлежит списку
-            }
-            //foreach(int point in Used_points) { Console.WriteLine(point); }
-            Used_points.Clear();
-            foreach (Array way in Ways)
-            {
-                if (!Stacks_of_ways[Convert.ToInt32(way.GetValue(1))].Contains(Convert.ToInt32(way.GetValue(2))))
-                {
-                    Used_ways.Add(way);
-                    foreach(int point in Stacks_of_ways[Convert.ToInt32(way.GetValue(1))]) 
-                    {
-                        Used_points.Add(point);
-                    }
-                    foreach (int point in Stacks_of_ways[Convert.ToInt32(way.GetValue(2))])
-                    {
-                        Used_points.Add(point);
-                    }
-                    foreach (int point in Stacks_of_ways[Convert.ToInt32(way.GetValue(2))])
-                    {
-                        Stacks_of_ways[Convert.ToInt32(way.GetValue(1))].Add(point);
-                    }
-                    Console.WriteLine(Used_points.Count);
-                    List<int> points_ = new List<int>();
-                    foreach (int point in Stacks_of_ways[Convert.ToInt32(way.GetValue(2))])
-                    {
-                        points_.Add(point);
-                    }
-                    foreach (int point in points_) 
-                    {
-                        Stacks_of_ways[point] = Stacks_of_ways[Convert.ToInt32(way.GetValue(1))];
-                    }
-                } // отчужденные друг от друга кучи
-            }
-            if (Used_points.Count() == points.Count())
-            {
-                foreach (var way in Used_ways)
-                {
-                    Console.WriteLine($"{way.GetValue(0)}  {way.GetValue(1)}  {way.GetValue(2)}");
-                }
-            }
-            else 
-            {
-                Console.WriteLine("-1");
-            }
+            string[] answer = new string[] { current_point, next_point };
+            return answer;
         }
     }
 }
