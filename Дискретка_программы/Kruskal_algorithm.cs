@@ -46,38 +46,38 @@
                 if (!sets_of_points.ContainsKey(ways[0, i][0] + "") && !sets_of_points.ContainsKey(ways[0, i][2] + ""))
                 {
                     used_ways.Add(ways[0, i]);
-                    sets_of_points[ways[0, i][0] + ""] = new List<string>();
+                    sets_of_points[ways[0, i][0] + ""] = new List<string>(); // создается в словаре ссылка с именем первой вершины
                     sets_of_points[ways[0, i][0] + ""].Add(ways[0, i][0] + "");
-                    sets_of_points[ways[0, i][0] + ""].Add(ways[0, i][2] + "");
-                    sets_of_points[ways[0, i][2] + ""] = new List<string>();
-                    sets_of_points[ways[0, i][2] + ""].Add(ways[0, i][0] + "");
-                    sets_of_points[ways[0, i][2] + ""].Add(ways[0, i][2] + "");
+                    sets_of_points[ways[0, i][0] + ""].Add(ways[0, i][2] + ""); // по ней доступны две вершины (вторая и она сама)
+                    sets_of_points[ways[0, i][2] + ""] = new List<string>(); // создается в словаре ссылка с именем второй вершины
+                    sets_of_points[ways[0, i][2] + ""].Add(ways[0, i][0] + ""); 
+                    sets_of_points[ways[0, i][2] + ""].Add(ways[0, i][2] + ""); // по ней доступны две вершины (первая и она сама)
                     sum += weights[i];
                 }
                 else if (!sets_of_points.ContainsKey(ways[0, i][0] + "") && sets_of_points.ContainsKey(ways[0, i][2] + ""))
                 {
                     used_ways.Add(ways[0, i]);
-                    sets_of_points[ways[0, i][0] + ""] = new List<string>();
-                    sets_of_points[ways[0, i][0] + ""].Add(ways[0, i][0] + "");
+                    sets_of_points[ways[0, i][0] + ""] = new List<string>(); // создание ссылки с именем вершины, имени которой нет в ссылках (новая вершина)
+                    sets_of_points[ways[0, i][0] + ""].Add(ways[0, i][0] + ""); // добавление в ссылку саму себя
                     foreach (string key in sets_of_points[ways[0, i][2] + ""])
                     {
-                        sets_of_points[ways[0, i][0] + ""].Add(key);
+                        sets_of_points[ways[0, i][0] + ""].Add(key); // добавление к новой вершине старых вершин (верших из ссылки, которая уже есть в словаре)
                     }
-                    List<string> keys = new List<string>();
+                    List<string> keys = new List<string>(); 
                     foreach (string key in sets_of_points[ways[0, i][2] + ""]) // Иначе foreach жалуется, что меняю список! (делаю список вершин статичным)
                     {
-                        keys.Add(key);
+                        keys.Add(key); 
                     }
                     foreach (string key in keys)
                     {
-                        sets_of_points[key].Add(ways[0, i][0] + "");
+                        sets_of_points[key].Add(ways[0, i][0] + ""); // добавление новой вершины в старые ссылки
                     }
                     sum += weights[i];
 
                 }
                 else if (sets_of_points.ContainsKey(ways[0, i][0] + "") && !sets_of_points.ContainsKey(ways[0, i][2] + ""))
                 {
-                    used_ways.Add(ways[0, i]);
+                    used_ways.Add(ways[0, i]); // идентично второму ifу только зеркально (первая вершина в словаре есть, а второй нет)
                     sets_of_points[ways[0, i][2] + ""] = new List<string>();
                     sets_of_points[ways[0, i][2] + ""].Add(ways[0, i][2] + "");
                     foreach (string key in sets_of_points[ways[0, i][0] + ""])
@@ -101,18 +101,18 @@
                     List<string> temp_1 = new List<string>();
                     foreach (string temp in sets_of_points[ways[0, i][0] + ""]) // Иначе foreach жалуется, что меняю список! (делаю список вершин статичным)
                     {
-                        temp_1.Add(temp);
+                        temp_1.Add(temp); // вершины, которых нет в группе второй вершины
                     }
                     List<string> temp_2 = new List<string>();
                     foreach (string temp in sets_of_points[ways[0, i][2] + ""]) // Иначе foreach жалуется, что меняю список! (делаю список вершин статичным)
                     {
-                        temp_2.Add(temp);
+                        temp_2.Add(temp); // вершины, которых нет в группе первой вершины
                     }
                     foreach (string point in temp_1)
                     {
                         foreach (string into in temp_2) 
                         {
-                            sets_of_points[point].Add(into);
+                            sets_of_points[point].Add(into); // добавление этих вершин друг в друга
                         }
                     }
                     foreach (string point in temp_2)
