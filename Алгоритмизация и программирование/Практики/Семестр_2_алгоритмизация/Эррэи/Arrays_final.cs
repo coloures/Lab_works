@@ -908,8 +908,6 @@ namespace ConsoleApplication19
 
 
                 }
-                Console.WriteLine("Выберите операцию над sortedlist: 1)Add;\n2)IndexOf (by key);\n" +
-                    "3)IndexOf (by value);\n4)Writing key by index;\n5)Writing value by index;\n6)Exit;\n7)Show.");
                 return true;
             }
             else
